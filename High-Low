@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Low Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to High-Low Game</h1>
+        <p>Instructions:</p>
+        <ol>
+            <li>Guess whether the next number will be higher or lower than the current number.</li>
+            <li>If your guess is correct, you earn points.</li>
+            <li>Keep playing to see how high you can score!</li>
+        </ol>
+        <button id="startBtn">Start Game</button>
+        <div id="gameArea" class="hidden">
+            <h2>Current Number: <span id="currentNumber">0</span></h2>
+            <p>Guess: 
+                <button id="higherBtn">Higher</button>
+                <button id="lowerBtn">Lower</button>
+            </p>
+            <p id="result"></p>
+            <p>Your Score: <span id="score">0</span></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const startBtn = document.getElementById('startBtn');
+    const higherBtn = document.getElementById('higherBtn');
+    const lowerBtn = document.getElementById('lowerBtn');
+    const gameArea = document.getElementById('gameArea');
+    const currentNumberDisplay = document.getElementById('currentNumber');
+    const resultDisplay = document.getElementById('result');
+    const scoreDisplay = document.getElementById('score');
+
+    let currentNumber = 0;
+    let score = 0;
+
+    function startGame() {
+        currentNumber = generateRandomNumber();
+        currentNumberDisplay.textContent = currentNumber;
+        gameArea.classList.remove('hidden');
+        startBtn.disabled = true;
+    }
+
+    function generateRandomNumber() {
+        return Math.floor(Math.random() * 100) + 1;
+    }
+
+    function checkGuess(guess) {
+        const nextNumber = generateRandomNumber();
+        currentNumberDisplay.textContent = nextNumber;
+        if ((guess === 'higher' && nextNumber > currentNumber) || (guess === 'lower' && nextNumber < currentNumber)) {
+            resultDisplay.textContent = 'Correct!';
+            score++;
+            scoreDisplay.textContent = score;
+        } else {
+            resultDisplay.textContent = 'Incorrect! Game Over.';
+            startBtn.disabled = false;
+        }
+        currentNumber = nextNumber;
+    }
+
+    startBtn.addEventListener('click', startGame);
+    higherBtn.addEventListener('click', () => checkGuess('higher'));
+    lowerBtn.addEventListener('click', () => checkGuess('lower'));
+});
